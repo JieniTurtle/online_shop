@@ -8,3 +8,7 @@ class MaterialService:
             material_id = Material.create_material()
             Material.insert_material_name(material_id, name, language)
         return material_id
+    
+    @staticmethod
+    def get_material_name(material_id, language):
+        return Material.get_material_name(material_id, language)

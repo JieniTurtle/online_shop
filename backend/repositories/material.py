@@ -3,7 +3,7 @@ from database import get_db_cursor
 class Material:
     @staticmethod
     def get_material_id_by_name(name, language):
-        if language not in ["zh-CN", "en-US"]:
+        if language not in ["cn", "en"]:
             print("Invalid language {language}, check the spelling")
             return -1
         
@@ -36,7 +36,7 @@ class Material:
 
     @staticmethod
     def insert_material_name(material_id, name, language):
-        if language not in ["zh-CN", "en-US"]:
+        if language not in ["cn", "en"]:
             print("Invalid language {language}, check the spelling")
             return False
         
@@ -51,3 +51,15 @@ class Material:
             print(f"insert_material_name query failed: {e}")
             return False
     
+    @staticmethod
+    def get_material_name(material_id, language):
+        try:
+            with get_db_cursor() as cursor:
+                cursor.execute(
+                    "SELECT name FROM material_name WHERE material_id = %s AND language_code = %s",
+                    (material_id, language)
+                )
+                result = cursor.fetchone()
+                return result["name"] if result else None
+        except Exception as e:
+            print(f"get_material_name query failed: {e}")

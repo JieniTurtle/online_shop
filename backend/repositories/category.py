@@ -3,7 +3,7 @@ from database import get_db_cursor
 class Category:
     @staticmethod
     def get_category_id_by_name(name, language):
-        if language not in ["zh-CN", "en-US"]:
+        if language not in ["cn", "en"]:
             print("Invalid language {language}, check the spelling")
             return -1
         
@@ -34,7 +34,7 @@ class Category:
 
     @staticmethod
     def insert_category_name(category_id, name, language):
-        if language not in ["zh-CN", "en-US"]:
+        if language not in ["cn", "en"]:
             print("Invalid language {language}, check the spelling")
             return False
         
@@ -49,3 +49,17 @@ class Category:
             print(f"insert_category_name query failed: {e}")
             return False
     
+    @staticmethod
+    def get_category_name(category_id, language):
+        print("language, category_id: ", language, category_id)
+        try:
+            with get_db_cursor() as cursor:
+                cursor.execute(
+                    "SELECT name FROM category_name WHERE category_id = %s AND language_code = %s",
+                    (category_id, language)
+                )
+                result = cursor.fetchone()
+                print("repo: get_category_name result: ", result)
+                return result['name'] if result else None
+        except Exception as e:
+            print(f"get_category_name query failed: {e}")

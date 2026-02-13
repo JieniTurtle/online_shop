@@ -1,14 +1,17 @@
--- CREATE TABLE LANGUAGE (
---     LANGUAGE_CODE VARCHAR(10) PRIMARY KEY,
---     NAME VARCHAR(20) NOT NULL
--- );
+-- Drop the existing constraint (replace 'constraint_name' with the actual name)
+ALTER TABLE language DROP CONSTRAINT IF EXISTS check_language_code;
 
--- ALTER TABLE language 
--- ADD CONSTRAINT check_language_code
--- CHECK (LANGUAGE_CODE IN ('zh-CN', 'en-US'));
+-- Add the new constraint with 'cn' and 'en' values
+ALTER TABLE language 
+ADD CONSTRAINT check_language_code
+CHECK (LANGUAGE_CODE IN ('cn', 'en'));
 
--- INSERT INTO LANGUAGE (LANGUAGE_CODE, NAME) VALUES
--- ('zh-CN', '简体中文'),
--- ('en-US', 'English');
+-- If you need to update existing records to match the new format:
+-- UPDATE LANGUAGE SET LANGUAGE_CODE = 'cn' WHERE LANGUAGE_CODE = 'cn';
+-- UPDATE LANGUAGE SET LANGUAGE_CODE = 'en' WHERE LANGUAGE_CODE = 'en-US';
 
-SELECT * FROM "language" 
+-- Insert new values if they don't exist
+INSERT INTO LANGUAGE (LANGUAGE_CODE, NAME) VALUES
+('cn', '简体中文'),
+('en', 'English')
+ON CONFLICT (LANGUAGE_CODE) DO NOTHING;

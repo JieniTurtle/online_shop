@@ -1,0 +1,22 @@
+{
+  "appName": "Online Shop",
+  "navigation": {
+    "products": "Products"
+  },
+  "home": {
+    "title": "Welcome to Our Online Shop",
+    "productLink": "View Products"
+  },
+  "productDetail": {
+    "title": "Product Details",
+    "productId": "Product ID",
+    "itemCode": "Item Code",
+    "category": "Category",
+    "bladeMaterial": "Blade Material",
+    "fittingsMaterial": "Fittings Material",
+    "totalLength": "Total Length",
+    "bladeLength": "Blade Length",
+    "tsukaLength": "Tsuka Length",
+    "goBack": "Back to Products"
+  }
+}

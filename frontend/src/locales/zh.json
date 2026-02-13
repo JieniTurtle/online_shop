@@ -1,0 +1,22 @@
+{
+  "appName": "网上商店",
+  "navigation": {
+    "products": "产品"
+  },
+  "home": {
+    "title": "欢迎来到我们的网上商店",
+    "productLink": "查看产品"
+  },
+  "productDetail": {
+    "title": "产品详情",
+    "productId": "产品ID",
+    "itemCode": "货号",
+    "category": "类别",
+    "bladeMaterial": "刀片材质",
+    "fittingsMaterial": "配件材质",
+    "totalLength": "总长度",
+    "bladeLength": "刀片长度",
+    "tsukaLength": "刀柄长度",
+    "goBack": "返回产品列表"
+  }
+}

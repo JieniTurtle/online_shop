@@ -1,3 +1,4 @@
 test
-backend/__pycache__
+**.pyc
 frontend/.vscode
+backend/static/images

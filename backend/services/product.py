@@ -38,11 +38,11 @@ class ProductService:
                     # Insert the product
                     product_id = ProductService.insert_product(
                         item_code, category, blade_material, fittings_material,
-                        total_length, blade_length, tsuka_length, 'en-US'
+                        total_length, blade_length, tsuka_length, 'en'
                     )
 
-                    ProductService.insert_product_description(product_id, Chinese_description, 'zh-CN')
-                    ProductService.insert_product_description(product_id, English_description, 'en-US')
+                    ProductService.insert_product_description(product_id, Chinese_description, 'cn')
+                    ProductService.insert_product_description(product_id, English_description, 'en')
                     
                 except Exception as e:
                     print(f"Error processing row {index}: {e}")
@@ -58,3 +58,79 @@ class ProductService:
 
     def get_all_item_codes():
         return Product.get_all_item_codes()
+    
+    def get_product_by_id(product_id, language):
+        print("get_product_by_id: product_id=", product_id)
+        result = Product.get_product_by_id(product_id)
+        print("raw result from Product.get_product_by_id:", result)
+        
+        if not result:
+            raise ValueError(f"Product with id {product_id} not found")
+        
+        # Access the values from the RealDictRow dictionary
+        item_code = result['item_code']
+        category_id = result['category_id']
+        blade_material_id = result['blade_material_id']
+        fittings_material_id = result['fittings_material_id']
+        total_length = result['total_length']
+        blade_length = result['blade_length']
+        tsuka_length = result['tsuka_length']
+        print("result:", item_code, category_id, blade_material_id, fittings_material_id, \
+            total_length, blade_length, tsuka_length)
+        
+        category = CategoryService.get_category_name(category_id, language)
+        blade_material = MaterialService.get_material_name(blade_material_id, language)
+        fittings_material = MaterialService.get_material_name(fittings_material_id, language)
+
+        return {
+            'product_id': product_id,
+            'item_code': item_code,
+            'category': category,
+            'blade_material': blade_material,
+            'fittings_material': fittings_material,
+            'total_length': float(total_length) if total_length else None,
+            'blade_length': float(blade_length) if blade_length else None,
+            'tsuka_length': float(tsuka_length) if tsuka_length else None
+        }
+    
+    def insert_main_image_url(product_id, image_url):
+        return Product.insert_main_image_url(product_id, image_url)
+
+    def get_main_image_url(product_id):
+      return Product.get_main_image_url(product_id)
+    
+import os
+from werkzeug.utils import secure_filename
+from flask import current_app
+
+# Add these constants at the top of the file (after imports)
+UPLOAD_FOLDER = 'static/images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def save_uploaded_file(file):
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Generate unique filename to prevent conflicts
+        import uuid
+        unique_filename = f"{uuid.uuid4()}_{filename}"
+        filepath = os.path.join(UPLOAD_FOLDER, unique_filename)
+        
+        # Ensure upload directory exists
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        
+        file.save(filepath)
+        return f"/static/images/{unique_filename}"  # Return relative path for web access
+    return None
+
+# Add this method to your ProductService class
+def upload_product_image(product_id, file):
+    # Save the uploaded file
+    image_url = save_uploaded_file(file)
+    if image_url:
+        # Update the product record with the image URL
+        return ProductService.insert_main_image_url(product_id, image_url)
+    return False
