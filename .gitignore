@@ -2,3 +2,5 @@ test
 **.pyc
 frontend/.vscode
 backend/static/images
+frontend/public/images/**
+**.xls

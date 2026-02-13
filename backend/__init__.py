@@ -6,6 +6,7 @@ from config import Config
 
 # 创建应用实例
 app = Flask(__name__)
+app.static_url_path = '/static'
 app.config.from_object(Config)
 CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")

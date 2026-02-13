@@ -99,6 +99,23 @@ class ProductService:
     def get_main_image_url(product_id):
       return Product.get_main_image_url(product_id)
     
+    def get_detailed_images(product_id):
+        return Product.get_detailed_images(product_id)
+    
+    def insert_detailed_image(product_id, image_url, order_number):
+        return Product.insert_detailed_image(product_id, image_url, order_number)
+    
+    def delete_image(image_id):
+        try:
+            product_id, order_number = Product.get_product_id_and_order(image_id)
+            Product.delete_image(image_id)
+            Product.decrease_order_number(product_id, order_number)
+            return True
+        
+        except Exception as e:
+            print(f"delete image failed: {e}")
+            return False
+    
 import os
 from werkzeug.utils import secure_filename
 from flask import current_app

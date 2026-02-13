@@ -11,6 +11,8 @@
       <div class="detail-item">
         <strong>{{ $t('productDetail.itemCode') }}:</strong> {{ product.item_code }}
       </div>
+      <!-- 修正：使用 v-bind 语法传递 productId -->
+      <ProductDetailedImages :productId="route.params.productId" />
       <!-- <div class="detail-item" v-if="product.category">
         <strong>{{ $t('productDetail.category') }}:</strong> {{ product.category }}
       </div> -->
@@ -40,9 +42,13 @@ import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import ProductDetailedImages from '../components/ImageViewer.vue'
 
 export default {
   name: 'ProductDetail',
+  components: {
+    ProductDetailedImages  // 注册组件
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -88,7 +94,8 @@ export default {
       product,
       loading,
       error,
-      goBack
+      goBack,
+      route  // 确保 route 在返回中可用
     };
   }
 };
